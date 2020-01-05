@@ -10,6 +10,7 @@ services:
       - backend
     volumes:
       - ${PROJECT_ROOT}:/var/www/src
+      - ${PROJECT_ROOT}/vendor:/var/www/src/vendor
     container_name: php
   apache:
     build:

@@ -33,14 +33,19 @@ RUN docker-php-ext-install gd
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # composer update to update all dependancies
-RUN composer update
+# RUN composer 
+# Install dependencies
+RUN composer install --prefer-dist --no-scripts --no-dev --no-autoloader && rm -rf /root/.composer
+
+# Copy existing application directory contents
+COPY ./src /var/www/src
+
+# Finish composer
+RUN composer dump-autoload --no-scripts --no-dev --optimize
 
 # Add user for laravel application
 RUN groupadd -g 1000 www
 RUN useradd -u 1000 -ms /bin/bash -g www www
-
-# Copy existing application directory contents
-COPY ./src /var/www/src
 
 # Copy existing application directory permissions
 COPY --chown=www:www ./src /var/www/src
