@@ -1,9 +1,9 @@
 FROM php:7.2-fpm
 
 # Copy composer.lock and composer.json
-COPY ./src/composer.lock ./src/composer.json /var/www/src/
+COPY composer.* /var/www/src/
 
-# # Set working directory
+# Set working directory
 WORKDIR /var/www/src
 
 # Install dependencies
@@ -32,13 +32,11 @@ RUN docker-php-ext-install gd
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# composer update to update all dependancies
-# RUN composer 
 # Install dependencies
-RUN composer install --prefer-dist --no-scripts --no-dev --no-autoloader && rm -rf /root/.composer
+RUN composer install --prefer-dist --no-scripts --no-dev --no-autoloader
 
 # Copy existing application directory contents
-COPY ./src /var/www/src
+COPY . /var/www/src
 
 # Finish composer
 RUN composer dump-autoload --no-scripts --no-dev --optimize
@@ -48,8 +46,7 @@ RUN groupadd -g 1000 www
 RUN useradd -u 1000 -ms /bin/bash -g www www
 
 # Copy existing application directory permissions
-COPY --chown=www:www ./src /var/www/src
-# RUN chmod -R 777 /var/www/src/storage && sudo chmod -R 777 /var/www/src/bootstrap/cache
+COPY --chown=www:www . /var/www/src
 
 # # Change current user to www
 USER www
