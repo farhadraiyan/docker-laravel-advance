@@ -29,5 +29,5 @@ Now you will see the default laravel app running on localhost:8080.
 
 ### Limitations
 
-This app will be fine if you have composer installed on your machine and if you are willing to take one step ("composer install") more before docker-compose up.
+The composer install in php.Dockerfile is generating empty vendor, so i have to manually install dependancies. Need to fix that.
 
